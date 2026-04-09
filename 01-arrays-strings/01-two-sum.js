@@ -15,20 +15,12 @@
 // ============================================
 
 function twoSum(nums, target) {
-  const result = []
-  const found = false
-  nums.forEach((num, index) => {
-    nums.find((num2, index2) => {
-      if (num + num2 === target && index !== index2) {
-        result.push(index, index2)
-        found = true
-        return true
-      }
-    });
-    if (found) return
-  });
-  console.log(result)
-  return result;
+  const seen = new Map()
+  for (let i = 0; i < nums.length; i++) {
+    if (seen.has(target - nums[i])) return [seen.get(target - nums[i]), i]
+    seen.set(nums[i], i)
+  }
+  return []
 }
 
 // ============================================
