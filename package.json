@@ -1,0 +1,21 @@
+{
+  "name": "interview-prep",
+  "version": "1.0.0",
+  "description": "Comprehensive exercise files organized by algorithm patterns for technical interview preparation.",
+  "main": "run-all.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javierpiquerasmartinez/interview-prep-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/javierpiquerasmartinez/interview-prep-js/issues"
+  },
+  "homepage": "https://github.com/javierpiquerasmartinez/interview-prep-js#readme"
+}

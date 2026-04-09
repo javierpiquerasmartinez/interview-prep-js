@@ -12,12 +12,23 @@
 //   Output: [0, 1]
 //   Explicación: nums[0] + nums[1] = 2 + 7 = 9
 //
-// Complejidad objetivo: Tiempo O(n), Espacio O(n)
-// Patrón: Hash Map / Dictionary
 // ============================================
 
 function twoSum(nums, target) {
-
+  const result = []
+  const found = false
+  nums.forEach((num, index) => {
+    nums.find((num2, index2) => {
+      if (num + num2 === target && index !== index2) {
+        result.push(index, index2)
+        found = true
+        return true
+      }
+    });
+    if (found) return
+  });
+  console.log(result)
+  return result;
 }
 
 // ============================================
