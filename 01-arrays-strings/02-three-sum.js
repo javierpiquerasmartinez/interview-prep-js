@@ -12,12 +12,40 @@
 //   Output: [[-1, -1, 2], [-1, 0, 1]]
 //
 // Complejidad objetivo: Tiempo O(n²), Espacio O(1) o O(n) para output
-// Patrón: Dos Pointers + Ordenamiento
 // ============================================
 
 function threeSum(nums) {
 
-  return;
+  if (nums.length < 3) return []
+
+  const result = []
+  const numsSorted = nums.sort((a, b) => a - b)
+
+  for (let i = 0; i < numsSorted.length - 2; i++) {
+    if (numsSorted[i] > 0) break
+    if (i > 0 && numsSorted[i] === numsSorted[i - 1]) continue
+
+    let left = i + 1
+    let right = numsSorted.length - 1
+
+    while (left < right) {
+      let sum = numsSorted[i] + numsSorted[left] + numsSorted[right]
+      if (sum === 0) {
+        result.push([numsSorted[i], numsSorted[left], numsSorted[right]])
+        while (left < right && numsSorted[left + 1] === numsSorted[left]) left++
+        while (left < right && numsSorted[right - 1] === numsSorted[right]) right--
+        left++
+        right--
+        continue
+      }
+      if (sum > 0) right--
+      if (sum < 0) left++
+
+    }
+  }
+
+  return result
+
 }
 
 // ============================================
