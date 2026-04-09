@@ -25,7 +25,41 @@
 // ============================================
 
 function trap(height) {
+  if (!height || height.length === 0) return 0;
 
+  let left = 0;
+  let right = height.length - 1;
+  let leftMax = 0;
+  let rightMax = 0;
+  let waterTrapped = 0;
+
+  while (left < right) {
+    if (height[left] < height[right]) {
+      // Si la altura izquierda es menor
+      if (height[left] >= leftMax) {
+        // Es un nuevo máximo a la izquierda
+        leftMax = height[left];
+      } else {
+        // Hay espacio para atrapar agua
+        // El agua se llena hasta leftMax (porque hay algo más alto a la derecha)
+        waterTrapped += leftMax - height[left];
+      }
+      left++;
+    } else {
+      // Si la altura derecha es menor o igual
+      if (height[right] >= rightMax) {
+        // Es un nuevo máximo a la derecha
+        rightMax = height[right];
+      } else {
+        // Hay espacio para atrapar agua
+        // El agua se llena hasta rightMax (porque hay algo más alto a la izquierda)
+        waterTrapped += rightMax - height[right];
+      }
+      right--;
+    }
+  }
+
+  return waterTrapped;
 }
 
 // ============================================

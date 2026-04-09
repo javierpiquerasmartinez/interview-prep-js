@@ -21,7 +21,33 @@
 // ============================================
 
 function maxArea(height) {
+  let maxWater = 0;
+  let left = 0;
+  let right = height.length - 1;
 
+  while (left < right) {
+    // Calculamos el área con los pointers actuales
+    const width = right - left;
+    const currentHeight = Math.min(height[left], height[right]);
+    const currentArea = width * currentHeight;
+
+    // Actualizamos el máximo si encontramos un área mayor
+    maxWater = Math.max(maxWater, currentArea);
+
+    // Estrategia de dos pointers:
+    // Movemos el pointer que apunta a la línea más corta
+    // Razón: El área está limitada por la línea más corta.
+    // Si movemos el pointer a la línea más larga, el ancho disminuye
+    // pero no puede mejorar porque la altura seguirá siendo la del más corto.
+    // Solo moviendo el más corto hay chance de encontrar uno más alto.
+    if (height[left] < height[right]) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+
+  return maxWater;
 }
 
 // ============================================

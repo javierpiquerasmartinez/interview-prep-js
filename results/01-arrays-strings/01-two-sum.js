@@ -17,7 +17,25 @@
 // ============================================
 
 function twoSum(nums, target) {
+  // Creamos un mapa para almacenar números vistos y sus índices
+  const seen = new Map();
 
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    const complement = target - num;
+
+    // Verificamos si el complemento ya existe en el mapa
+    if (seen.has(complement)) {
+      // Devolvemos los índices (el del complemento y el actual)
+      return [seen.get(complement), i];
+    }
+
+    // Almacenamos el número actual y su índice
+    seen.set(num, i);
+  }
+
+  // Si no hay solución (no debería pasar según el problema)
+  return [];
 }
 
 // ============================================

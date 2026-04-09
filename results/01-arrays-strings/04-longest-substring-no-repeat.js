@@ -23,7 +23,31 @@
 // ============================================
 
 function lengthOfLongestSubstring(s) {
+  // Mapa para almacenar el último índice visto de cada carácter
+  const charIndexMap = new Map();
+  let maxLength = 0;
+  let left = 0; // Inicio de la ventana
 
+  for (let right = 0; right < s.length; right++) {
+    const char = s[right];
+
+    // Si el carácter ya existe en la ventana actual
+    if (charIndexMap.has(char) && charIndexMap.get(char) >= left) {
+      // Movemos el inicio de la ventana después del carácter duplicado anterior
+      left = charIndexMap.get(char) + 1;
+    }
+
+    // Actualizamos el índice del carácter actual
+    charIndexMap.set(char, right);
+
+    // Calculamos la longitud de la ventana actual
+    const currentLength = right - left + 1;
+
+    // Actualizamos la longitud máxima
+    maxLength = Math.max(maxLength, currentLength);
+  }
+
+  return maxLength;
 }
 
 // ============================================

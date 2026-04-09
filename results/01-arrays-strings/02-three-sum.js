@@ -16,8 +16,54 @@
 // ============================================
 
 function threeSum(nums) {
+  // Ordenamos el array para poder usar dos pointers
+  nums.sort((a, b) => a - b);
+  const result = [];
 
-  return;
+  // Iteramos cada número como el primero de la tripla
+  for (let i = 0; i < nums.length - 2; i++) {
+    const first = nums[i];
+
+    // Optimización: Si el número es positivo, no hay forma de sumar a 0
+    if (first > 0) break;
+
+    // Saltamos duplicados para evitar triplas duplicadas
+    if (i > 0 && nums[i] === nums[i - 1]) continue;
+
+    // Usamos dos pointers para encontrar los otros dos números
+    let left = i + 1;
+    let right = nums.length - 1;
+
+    while (left < right) {
+      const sum = first + nums[left] + nums[right];
+
+      if (sum === 0) {
+        // Encontramos una tripla válida
+        result.push([first, nums[left], nums[right]]);
+
+        // Saltamos duplicados del pointer izquierdo
+        while (left < right && nums[left] === nums[left + 1]) {
+          left++;
+        }
+        // Saltamos duplicados del pointer derecho
+        while (left < right && nums[right] === nums[right - 1]) {
+          right--;
+        }
+
+        // Movemos ambos pointers
+        left++;
+        right--;
+      } else if (sum < 0) {
+        // Necesitamos un número más grande, movemos left hacia la derecha
+        left++;
+      } else {
+        // sum > 0, necesitamos un número más pequeño, movemos right hacia la izquierda
+        right--;
+      }
+    }
+  }
+
+  return result;
 }
 
 // ============================================
