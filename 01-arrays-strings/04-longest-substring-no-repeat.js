@@ -18,13 +18,24 @@
 //   Input: s = "pwwkew" → Output: 3 ("wke")
 //
 // Complejidad objetivo: Tiempo O(n), Espacio O(min(m, n))
-// Patrón: Sliding Window
 // m = tamaño del charset, n = longitud del string
 // ============================================
 
 function lengthOfLongestSubstring(s) {
-
+  if (!s) return 0
+  const charMap = new Map()
+  let left = 0
+  let maxLength = 0
+  for (let right = 0; right < s.length; right++) {
+    let char = s[right]
+    if (charMap.has(char) && charMap.get(char) >= left)
+      left = charMap.get(char) + 1
+    charMap.set(char, right)
+    maxLength = Math.max(maxLength, right - left + 1)
+  }
+  return maxLength
 }
+
 
 // ============================================
 // ALTERNATIVE: Using Set (simpler, similar complexity)
