@@ -13,7 +13,6 @@
 //   Output: 1 -> 1 -> 2 -> 3 -> 4 -> 4
 //
 // Complejidad objetivo: Tiempo O(n+m), Espacio O(1)
-// Patrón: Dos punteros / Merge
 // ============================================
 
 class ListNode {
@@ -23,36 +22,25 @@ class ListNode {
   }
 }
 
-// Solución: Fusionar dos listas ordenadas con dos punteros
-// Idea: Comparar nodos de ambas listas y construir una nueva lista ordenada
 function mergeTwoLists(list1, list2) {
-  // Crear un nodo dummy para simplificar la lógica (sin caso especial para head)
-  const dummy = new ListNode(0);
-  let current = dummy;
+  let result = new ListNode(0)
+  let current = result
 
-  // Recorrer ambas listas simultáneamente
   while (list1 !== null && list2 !== null) {
-    // Comparar y añadir el nodo más pequeño
-    if (list1.val <= list2.val) {
-      current.next = list1;
-      list1 = list1.next;
+    if (list1.val < list2.val) {
+      current.next = list1
+      list1 = list1.next
     } else {
-      current.next = list2;
-      list2 = list2.next;
+      current.next = list2
+      list2 = list2.next
     }
-    current = current.next;
+    current = current.next
   }
 
-  // Anexar los nodos restantes de la lista que aún no se acabó
-  // Nota: Solo una de estas líneas ejecutará (la otra es null)
-  if (list1 !== null) {
-    current.next = list1;
-  } else {
-    current.next = list2;
-  }
+  if (list1 === null) current.next = list2
+  else current.next = list1
 
-  // Retornar dummy.next (el verdadero head de la lista fusionada)
-  return dummy.next;
+  return result.next
 }
 
 // Función auxiliar para crear lista enlazada desde array
