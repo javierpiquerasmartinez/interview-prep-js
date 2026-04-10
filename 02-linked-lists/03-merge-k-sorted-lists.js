@@ -25,47 +25,39 @@ class ListNode {
 // Idea: Dividir las k listas en mitades, resolver recursivamente, luego fusionar
 // Complejidad: O(n*log(k)) tiempo, O(log(k)) espacio (pila de recursión)
 function mergeKListsDivideConquer(lists) {
-  if (!lists || lists.length === 0) return null;
-  return mergeHelper(lists, 0, lists.length - 1);
-}
+  if (lists === null || lists.length === 0) return null
+  if (lists.length === 1) return lists[0]
+  if (lists.length === 2) {
+    let list1 = lists[0]
+    let list2 = lists[1]
+    let result = new ListNode(0)
+    let current = result
 
-function mergeHelper(lists, left, right) {
-  // Caso base: solo una lista
-  if (left === right) return lists[left];
-
-  // Si no hay listas en este rango
-  if (left > right) return null;
-
-  // Dividir en mitades
-  const mid = Math.floor((left + right) / 2);
-
-  // Resolver recursivamente para ambas mitades
-  const leftMerged = mergeHelper(lists, left, mid);
-  const rightMerged = mergeHelper(lists, mid + 1, right);
-
-  // Conquista: Fusionar las dos mitades
-  return mergeTwoLists(leftMerged, rightMerged);
-}
-
-// Función auxiliar para fusionar dos listas (usada por divide y conquista)
-function mergeTwoLists(l1, l2) {
-  const dummy = new ListNode(0);
-  let current = dummy;
-
-  while (l1 !== null && l2 !== null) {
-    if (l1.val <= l2.val) {
-      current.next = l1;
-      l1 = l1.next;
-    } else {
-      current.next = l2;
-      l2 = l2.next;
+    while (list1 !== null && list2 !== null) {
+      if (list1.val < list2.val) {
+        current.next = list1
+        list1 = list1.next
+      } else {
+        current.next = list2
+        list2 = list2.next
+      }
+      current = current.next
     }
-    current = current.next;
+
+    if (list1 === null) current.next = list2
+    else current.next = list1
+
+    return result.next
   }
 
-  current.next = l1 !== null ? l1 : l2;
-  return dummy.next;
+  const separator = Math.floor(lists.length / 2)
+
+  let l1 = mergeKListsDivideConquer(lists.slice(0, separator))
+  let l2 = mergeKListsDivideConquer(lists.slice(separator))
+
+  return mergeKListsDivideConquer([l1, l2])
 }
+
 
 // Función auxiliar para crear listas desde arrays
 function createLists(arrOfArrs) {
