@@ -36,8 +36,39 @@ class TreeNode {
  * @return {boolean} - True si es un BST válido
  */
 function isValidBST(root) {
+  if (root === null) return true
+  return validate(root.left, -Infinity, root.val) && validate(root.right, root.val, Infinity)
 }
 
+function validate(node, min, max) {
+  if (node === null) return true
+  if (!(min < node.val && node.val < max)) return false
+  return validate(node.left, min, node.val) && validate(node.right, node.val, max)
+}
+
+/**
+ * 
+ * SOLUCION 2
+ */
+function isValidBSTInOrder(root) {
+  let lastValue = -Infinity
+  let isValid = true
+
+  function inOrder(node) {
+    if (node === null) return true
+    inOrder(node.left)
+    if (node.val > lastValue) {
+      lastValue = node.val
+    } else {
+      isValid = false
+    }
+    inOrder(node.right)
+  }
+
+  inOrder(root)
+  return isValid
+
+}
 
 // ============================================
 // Test Cases
