@@ -17,10 +17,28 @@
 //   Área = min(8,7) × (8-1) = 7 × 7 = 49
 //
 // Complejidad objetivo: Tiempo O(n), Espacio O(1)
-// Patrón: Dos Pointers
 // ============================================
 
 function maxArea(height) {
+
+  if (height.length < 2) return 0
+
+  let i = 0
+  let j = height.length - 1
+
+  let maxArea = 0
+
+  while (i < j) {
+    let area = (j - i) * Math.min(height[i], height[j])
+    maxArea = Math.max(area, maxArea)
+    if (height[i] < height[j]) {
+      i++
+    } else {
+      j--
+    }
+  }
+
+  return maxArea
 
 }
 
