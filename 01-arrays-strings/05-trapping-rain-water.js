@@ -21,11 +21,29 @@
 //   Agua atrapada en posiciones 2 (4 unidades) y 5 (2 unidades) = 6
 //
 // Complejidad objetivo: Tiempo O(n), Espacio O(1)
-// Patrón: Dos Pointers con Pre-cálculo de máximos
 // ============================================
 
 function trap(height) {
+  let heightL = 0
+  let heightR = 0
 
+  let water = 0
+
+  let maxHeightR = height.slice()
+
+  for (let i = height.length - 1; i >= 0; i--) {
+    heightR = heightR < height[i] ? height[i] : heightR
+    maxHeightR[i] = heightR
+  }
+
+  for (let i = 0; i < height.length; i++) {
+    heightR = maxHeightR[i]
+    let maxHeight = Math.min(heightL, heightR)
+    if (height[i] < maxHeight) water += maxHeight - height[i]
+    heightL = height[i] > heightL ? height[i] : heightL
+  }
+
+  return water
 }
 
 // ============================================
