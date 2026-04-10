@@ -31,6 +31,62 @@ class TreeNode {
  * @return {number[][]} - Lista de listas con valores por nivel
  */
 function levelOrder(root) {
+  if (root === null) return []
+  let result = []
+  let queue = new Queue([root])
+  while (queue.nodeQ.length > 0) {
+    let levelSize = queue.nodeQ.length
+    let levelNodes = []
+    for (let i = 0; i < levelSize; i++) {
+      let node = queue.pull()
+      levelNodes.push(node.val)
+      if (node.left) queue.push(node.left)
+      if (node.right) queue.push(node.right)
+    }
+    result.push(levelNodes)
+  }
+  return result
+}
+
+function levelOrderDFS(root) {
+  let result = []
+
+  function orderByLevel(node, level) {
+    if (node === null) return
+    result[level] = result[level] ? result[level].concat(node.val) : [node.val]
+    orderByLevel(node.left, level + 1)
+    orderByLevel(node.right, level + 1)
+  }
+
+  orderByLevel(root, 0)
+
+  return result
+}
+
+function levelOrderWithDepth(root) {
+  if (root === null) return []
+  let result = []
+  let queue = [[root, 0]]
+  while (queue.length > 0) {
+    let [node, depth] = queue.shift()
+    result[depth] = result[depth] ? result[depth].concat(node.val) : [node.val]
+    if (node.left) queue.push([node.left, depth + 1])
+    if (node.right) queue.push([node.right, depth + 1])
+  }
+  return result
+}
+
+
+class Queue {
+  constructor(nodes) {
+    this.nodeQ = nodes
+  }
+  pull() {
+    return this.nodeQ.shift()
+  }
+  push(node) {
+    this.nodeQ.push(node)
+  }
 }
 
 

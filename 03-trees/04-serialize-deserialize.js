@@ -38,6 +38,68 @@ class Codec {
    * @return {string} - Representación en string
    */
   serialize(root) {
+    let result = []
+    function stringifyTree(node) {
+      if (node === null) {
+        result.push('null')
+        return
+      }
+      result.push(node.val.toString())
+      stringifyTree(node.left)
+      stringifyTree(node.right)
+    }
+    stringifyTree(root)
+    return result.join(',')
+  }
+
+
+  /**
+   * Deserializa un string a árbol binario
+   * @param {string} data - String serializado
+   * @return {TreeNode} - Raíz del árbol reconstruido
+   */
+  deserialize(data) {
+    let index = 0
+    let arrayString = data.split(',')
+
+    function fromStringToTree() {
+      let node = arrayString[index]
+      index++
+      if (node === 'null') return null
+      return new TreeNode(
+        Number(node),
+        fromStringToTree(),
+        fromStringToTree()
+      )
+    }
+
+    return fromStringToTree()
+
+  }
+}
+
+class CodecBFS {
+  /**
+   * Serializa un árbol binario a string
+   * @param {TreeNode} root - Raíz del árbol
+   * @return {string} - Representación en string
+   */
+  serialize(root) {
+    if (root === null) return "null"
+    let queue = [root]
+    let result
+
+    while (queue.length > 0) {
+      let node = queue.shift()
+      if (!node) {
+        result = result ? result.concat(',null') : 'null'
+        continue
+      }
+      result = result ? result.concat(',' + node.val) : node.val.toString()
+      queue.push(node.left)
+      queue.push(node.right)
+    }
+    return result
   }
 
   /**
@@ -46,6 +108,28 @@ class Codec {
    * @return {TreeNode} - Raíz del árbol reconstruido
    */
   deserialize(data) {
+    if (data === 'null') return null
+    let serTree = data.split(',')
+    const root = new TreeNode(Number(serTree.shift()))
+    const queue = [root]
+    while (serTree.length > 0) {
+      let node = queue.shift()
+      let leftV = serTree.shift()
+      let rightV = serTree.shift()
+      if (leftV === 'null') {
+        node.left = null
+      } else {
+        node.left = new TreeNode(Number(leftV))
+        queue.push(node.left)
+      }
+      if (rightV === 'null') {
+        node.right = null
+      } else {
+        node.right = new TreeNode(Number(rightV))
+        queue.push(node.right)
+      }
+    }
+    return root
   }
 }
 
