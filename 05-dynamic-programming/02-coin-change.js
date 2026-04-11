@@ -16,17 +16,20 @@
 
 /**
  * Solución: DP Tabulación - Bottom-Up
- *
- * Idea: Para cada cantidad i, calculamos el mínimo número de monedas
- * usando cada tipo de moneda disponible.
- *
- * Relación de recurrencia:
- * dp[i] = min(dp[i - coin] + 1) para cada moneda <= i
- *
- * dp[i] representa el mínimo de monedas para hacer la cantidad i
+ * 
  */
 function coinChange(coins, amount) {
-
+  let dp = new Array(amount + 1).fill(Infinity)
+  dp[0] = 0
+  for (let i = 1; i < dp.length; i++) {
+    for (let j = 0; j < coins.length; j++) {
+      if (coins[j] > i) continue
+      let diff = i - coins[j]
+      dp[i] = Math.min(dp[i], dp[diff] + 1)
+    }
+  }
+  if (dp[amount] === Infinity) return -1
+  return dp[amount]
 }
 
 /**
