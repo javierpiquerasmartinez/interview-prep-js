@@ -25,6 +25,36 @@
  * @returns {boolean} true si se pueden terminar todos los cursos
  */
 function canFinish(numCourses, prerequisites) {
+  let adj = new Array(numCourses).fill(null).map(() => [])
+  let inDegree = new Array(numCourses).fill(0)
+
+  let completed = 0
+
+  for (let i = 0; i < prerequisites.length; i++) {
+    const [course, req] = prerequisites[i]
+    adj[req].push(course)
+    inDegree[course]++
+  }
+
+  let queue = []
+
+  for (let i = 0; i < inDegree.length; i++) {
+    if (inDegree[i] === 0) queue.push(i)
+  }
+
+  while (queue.length > 0) {
+    let course = queue.shift()
+    completed++
+    for (let j = 0; j < adj[course].length; j++) {
+      let adjDegree = --inDegree[adj[course][j]]
+      if (adjDegree === 0) {
+        queue.push(adj[course][j])
+      }
+    }
+  }
+
+  if (completed === numCourses) return true
+  return false
 
 }
 
@@ -33,6 +63,35 @@ function canFinish(numCourses, prerequisites) {
  * (detecta ciclos en grafo dirigido)
  */
 function canFinishDFS(numCourses, prerequisites) {
+  let adj = new Array(numCourses).fill(null).map(() => [])
+  let status = new Array(numCourses).fill(0)
+
+  for (let i = 0; i < prerequisites.length; i++) {
+    const [course, req] = prerequisites[i]
+    adj[req].push(course)
+  }
+
+  function dfs(node, adj, status) {
+    if (status[node] === 2) return true
+    status[node] = 1
+    let res = true
+    for (let i = 0; i < adj[node].length; i++) {
+      if (status[adj[node][i]] === 1) return false
+      if (status[adj[node][i]] === 0) {
+        res = res && dfs(adj[node][i], adj, status)
+        if (!res) return false
+      }
+    }
+    status[node] = 2
+    return res
+  }
+
+  let result = true
+  for (let i = 0; i < numCourses; i++) {
+    result = result && dfs(i, adj, status)
+  }
+
+  return result
 
 }
 
