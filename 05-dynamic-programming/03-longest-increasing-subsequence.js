@@ -17,35 +17,70 @@
 /**
  * Solución 1: DP Tabulación - O(n²) Tiempo
  *
- * Relación de recurrencia:
- * dp[i] = 1 + max(dp[j]) para todos j < i donde nums[j] < nums[i]
- *
- * dp[i] representa la longitud de LIS que termina en nums[i]
  */
 function lengthOfLIS_DP(nums) {
+  if (!nums || nums.length === 0) return 0
+  const dp = new Array(nums.length).fill(1)
+
+  for (let i = 1; i < dp.length; i++) {
+    for (let prev = 0; prev < i; prev++) {
+      if (nums[prev] < nums[i]) {
+        dp[i] = Math.max(dp[i], dp[prev] + 1)
+      }
+    }
+  }
+
+  return Math.max(...dp)
 
 }
 
 /**
  * Solución 2: Binary Search - O(n log n) Tiempo (OPTIMAL)
- *
- * Idea inteligente:
- * Mantenemos un array `tails` donde tails[i] es el elemento más pequeño
- * que termina una subsecuencia creciente de longitud i+1.
- *
- * Esto permite usar búsqueda binaria para mantener el array ordenado
- * y eficientemente encontrar dónde insertar cada nuevo elemento.
  */
 function lengthOfLIS_BinarySearch(nums) {
-
+  if (!nums || nums.length === 0) return 0
+  let tails = []
+  for (let num of nums) {
+    let left = 0, right = tails.length
+    while (left < right) {
+      let mid = Math.floor((left + right) / 2)
+      if (tails[mid] < num) left = mid + 1
+      else right = mid
+    }
+    tails[left] = num
+  }
+  return tails.length
 }
 
 /**
  * Solución 3: DP con reconstrucción (obtener la subsecuencia real)
- *
- * A veces en entrevistas preguntan: ¿cuál es la subsecuencia, no solo la longitud?
  */
 function getLIS(nums) {
+  if (!nums || nums.length === 0) return 0
+  const dp = new Array(nums.length).fill(1)
+  const parent = new Array(nums.length).fill(-1)
+
+  for (let i = 1; i < dp.length; i++) {
+    for (let prev = 0; prev < i; prev++) {
+      if (nums[prev] < nums[i]) {
+        if (dp[prev] + 1 > dp[i]) {
+          dp[i] = dp[prev] + 1
+          parent[i] = prev
+        }
+
+      }
+    }
+  }
+
+  let maxIndex = dp.findIndex(a => a === Math.max(...dp))
+  let list = []
+
+  while (maxIndex !== -1) {
+    list.unshift(nums[maxIndex])
+    maxIndex = parent[maxIndex]
+  }
+
+  return { length: Math.max(...dp), subsequence: list }
 
 }
 

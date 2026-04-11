@@ -19,23 +19,26 @@
 /**
  * Solución: DP Tabulación 2D - Bottom-Up
  *
- * Relación de recurrencia:
- * Si text1[i-1] === text2[j-1]:
- *   dp[i][j] = dp[i-1][j-1] + 1
- * Si son distintos:
- *   dp[i][j] = max(dp[i-1][j], dp[i][j-1])
- *
- * dp[i][j] = longitud de LCS de text1[0...i-1] y text2[0...j-1]
  */
 function longestCommonSubsequence(text1, text2) {
+  let dp = new Array(text1.length + 1).fill(null)
+  dp = dp.map(p => new Array(text2.length + 1).fill(0))
 
+  for (i = 1; i < dp.length; i++) {
+    for (j = 1; j < dp[i].length; j++) {
+      if (text1[i - 1] === text2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1])
+      }
+    }
+  }
+
+  return dp[dp.length - 1][text2.length]
 }
 
 /**
  * Solución optimizada: Espacio O(min(m,n))
- *
- * Observación: Solo necesitamos la fila anterior para calcular la actual
- * Podemos usar solo 2 filas en lugar de m+1 filas
  */
 function longestCommonSubsequence_OptimizedSpace(text1, text2) {
 
@@ -44,8 +47,6 @@ function longestCommonSubsequence_OptimizedSpace(text1, text2) {
 /**
  * Solución con reconstrucción: obtener la subsecuencia real
  *
- * A veces necesitas no solo la longitud, sino la subsecuencia misma
- * Esto requiere guardar decisiones durante el llenado de la tabla
  */
 function getLongestCommonSubsequence(text1, text2) {
 
