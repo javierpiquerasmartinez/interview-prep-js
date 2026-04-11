@@ -28,7 +28,36 @@
  * @returns {number} Longitud de la cadena de transformación (0 si imposible)
  */
 function ladderLength(beginWord, endWord, wordList) {
+  const wordSet = new Set(wordList)
+  if (!wordSet.has(endWord)) return 0
 
+  const queue = []
+  const visited = new Set()
+  visited.add(beginWord)
+  queue.push([beginWord, 1])
+
+  while (queue.length > 0) {
+    let [word, length] = queue.shift()
+    if (word === endWord) return length
+    for (let w of wordSet) {
+      if (!visited.has(w) && matches(word, w)) {
+        queue.push([w, length + 1])
+        visited.add(w)
+      }
+    }
+  }
+
+  return 0
+
+}
+
+function matches(w1, w2) {
+  let differ = 0
+  for (let i = 0; i < w1.length; i++) {
+    if (w1[i] !== w2[i]) differ++
+    if (differ > 1) return false
+  }
+  return differ === 1
 }
 
 
@@ -37,6 +66,57 @@ function ladderLength(beginWord, endWord, wordList) {
  * Expande desde ambos extremos simultáneamente
  */
 function ladderLengthBidirectional(beginWord, endWord, wordList) {
+  const wordSet = new Set(wordList)
+  if (!wordSet.has(endWord)) return 0
+
+  const queue = []
+
+  let beginSet = new Set()
+  let endSet = new Set()
+
+  let visited = new Set([beginWord, endWord])
+
+  beginSet.add(beginWord)
+  endSet.add(endWord)
+
+  let counter = 1
+
+  while (beginSet.size > 0 && endSet.size > 0) {
+    let nextLevel = new Set()
+    if (beginSet.size <= endSet.size) {
+      for (let w of beginSet) {
+        for (let eW of wordSet) {
+          if (matches(w, eW)) {
+            if (endSet.has(eW)) {
+              return counter + 1
+            } else if (!visited.has(eW)) {
+              visited.add(eW)
+              nextLevel.add(eW)
+            }
+          }
+        }
+      }
+      counter++
+      beginSet = nextLevel
+    } else {
+      for (let w of endSet) {
+        for (let eW of wordSet) {
+          if (matches(w, eW)) {
+            if (endSet.has(eW)) {
+              return counter + 1
+            } else if (!visited.has(eW)) {
+              visited.add(eW)
+              nextLevel.add(eW)
+            }
+          }
+        }
+      }
+      counter++
+      endSet = nextLevel
+    }
+  }
+
+  return counter
 
 }
 
