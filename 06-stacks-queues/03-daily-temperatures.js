@@ -25,7 +25,23 @@
 
 
 function dailyTemperatures(temperatures) {
+  const stack = []
+  const result = new Array(temperatures.length).fill(0)
 
+  for (let i = 0; i < temperatures.length; i++) {
+    while (stack.length > 0) {
+      let [item, ind] = stack.pop()
+      if (item < temperatures[i]) {
+        result[ind] = i - ind
+        continue
+      }
+      stack.push([item, ind])
+      break
+    }
+    stack.push([temperatures[i], i])
+  }
+
+  return result
 }
 
 /**
