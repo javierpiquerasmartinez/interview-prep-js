@@ -24,14 +24,62 @@
  * @returns {number} Número de islas
  */
 function numIslands(grid) {
+  let numIslands = 0
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      if (grid[i][j] === '1') {
+        numIslands++
+        floodIsland(i, j)
+      }
+    }
+  }
+  function floodIsland(i, j) {
+    if (grid[i][j] !== '1') return
+    grid[i][j] = '*'
+    if (i > 0) {
+      floodIsland(i - 1, j)
+    }
+    if (i < grid.length - 1) {
+      floodIsland(i + 1, j)
+    }
+    if (j > 0) {
+      floodIsland(i, j - 1)
+    }
+    if (j < grid[i].length - 1) {
+      floodIsland(i, j + 1)
+    }
+  }
 
+  return numIslands
 }
+
+
 
 /**
  * Alternativa con BFS (Breadth-First Search) usando cola
  */
 function numIslandsBFS(grid) {
-
+  let numIslands = 0
+  let queue = []
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      if (grid[i][j] === '1') {
+        numIslands++
+        queue.push([i, j])
+        while (queue.length > 0) {
+          let [pieceI, pieceJ] = queue.shift()
+          if (grid[pieceI][pieceJ] === '1') {
+            grid[pieceI][pieceJ] = '*'
+            if (pieceI > 0) queue.push([pieceI - 1, pieceJ])
+            if (pieceI < grid.length - 1) queue.push([pieceI + 1, pieceJ])
+            if (pieceJ > 0) queue.push([pieceI, pieceJ - 1])
+            if (pieceJ < grid[pieceI].length - 1) queue.push([pieceI, pieceJ + 1])
+          }
+        }
+      }
+    }
+  }
+  return numIslands
 }
 
 // ============================================
