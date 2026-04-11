@@ -25,6 +25,21 @@
  * SOLUCIÓN: Utiliza una pila (stack) para rastrear paréntesis abiertos
  */
 function isValid(s) {
+  const sym1 = ['(', ')']
+  const sym2 = ['[', ']']
+  const sym3 = ['{', '}']
+  const stack = []
+  for (let sy of s) {
+    if (sy === sym1[0] || sy === sym2[0] || sy === sym3[0]) {
+      stack.push(sy)
+      continue
+    }
+    if (sy === sym1[1] && stack.pop() === sym1[0]) continue
+    if (sy === sym2[1] && stack.pop() === sym2[0]) continue
+    if (sy === sym3[1] && stack.pop() === sym3[0]) continue
+    return false
+  }
+  return stack.length === 0
 }
 
 /**
