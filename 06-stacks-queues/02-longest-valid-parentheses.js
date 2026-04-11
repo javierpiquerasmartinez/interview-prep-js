@@ -22,6 +22,21 @@
 
 
 function longestValidParentheses(s) {
+  let stack = [-1]
+  let maxLen = 0
+  for (let [i, sy] of [...s].entries()) {
+    if (sy === '(') {
+      stack.push(i)
+      continue
+    }
+    stack.pop()
+    if (stack.length === 0) {
+      stack.push(i)
+      continue
+    }
+    maxLen = Math.max(i - stack[stack.length - 1], maxLen)
+  }
+  return maxLen
 }
 
 
